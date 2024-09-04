@@ -38,12 +38,12 @@ void publish_rot(AxisRot rot, ros::Publisher pub) {
     std_msgs::Float64MultiArray msg;
 
     msg.data.resize(3);
-    msg.data[0] = rot.yaw;
-    msg.data[1] = rot.pitch;
-    msg.data[2] = rot.roll;
+    msg.data[0] = rot.yaw * 180 / M_PI;
+    msg.data[1] = rot.pitch * 180 / M_PI;
+    msg.data[2] = rot.roll * 180 / M_PI;
 
     pub.publish(msg);
-    ROS_INFO("/nYaw: %f\nPitch: %f\nRoll: %f\n", msg.data[0], msg.data[1], msg.data[2]);
+    // ROS_INFO("\nYaw: %f\nPitch: %f\nRoll: %f\n", msg.data[0], msg.data[1], msg.data[2]);
 }
 
 int main(int argc, char **argv) {
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
     ros::NodeHandle nh;
     ros::Subscriber sub = nh.subscribe("/imu", 1000, &FetchQuaternion::fetch_data, &fq);
-    ros::Publisher pub = nh.advertise<std_msgs::Float64MultiArray>("/imu_in_degree", 1000);
+    ros::Publisher pub = nh.advertise<std_msgs::Float64MultiArray>("/imu_degree", 1000);
 
     ros::Rate loop_rate(10);
 
